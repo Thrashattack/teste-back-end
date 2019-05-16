@@ -5,27 +5,17 @@
  */
 package api.service;
 
-import api.repo.Empresa;
+import api.model.Empresa;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author Unknow
  */
 @Stateless
-@Path("empresa")
 public class EmpresaFacadeREST extends AbstractFacade<Empresa> {
 
     @PersistenceContext(unitName = "api_rest_war_1.0-SNAPSHOTPU")
@@ -35,50 +25,33 @@ public class EmpresaFacadeREST extends AbstractFacade<Empresa> {
         super(Empresa.class);
     }
 
-    @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Empresa entity) {
         super.create(entity);
     }
 
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Empresa entity) {
+    @Override
+    public void edit(Empresa entity) {
         super.edit(entity);
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(Integer id) {
         super.remove(super.find(id));
     }
 
-    @GET
-    @Path("{cnpj}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Empresa find(@PathParam("cnpj") Integer cnpj) {
+    public Empresa findByCnpj(String cnpj) {
         return super.find(cnpj);
     }
 
-    @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Empresa> findAll() {
         return super.findAll();
     }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Empresa> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Empresa> findRange(Integer from, Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
     }

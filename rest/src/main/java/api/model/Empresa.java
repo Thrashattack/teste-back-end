@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.repo;
+package api.model;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -68,6 +68,7 @@ public class Empresa implements Serializable {
     private String nomeFantasia;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
     private Collection<Socios> sociosCollection;
+    private Double capitalSocial;
 
     public Empresa() {
     }
@@ -82,6 +83,7 @@ public class Empresa implements Serializable {
         this.email = email;
         this.razaoSocial = razaoSocial;
         this.nomeFantasia = nomeFantasia;
+        this.capitalSocial = 0.0;
     }
 
     public Integer getId() {
@@ -123,12 +125,13 @@ public class Empresa implements Serializable {
     public void setNomeFantasia(String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
     }
-    public Double getCapitalSocial() {
-        Double capitalSocial = 0.0;
+    public void updateCapitalSocial() {        
         for(Socios s : sociosCollection) {
-            capitalSocial += s.getValorCota();
+            this.capitalSocial += s.getValorCota();
         }
-        return capitalSocial;
+    }
+    public Double getCapitalSocial() {        
+        return this.capitalSocial;
     }
 
     @XmlTransient

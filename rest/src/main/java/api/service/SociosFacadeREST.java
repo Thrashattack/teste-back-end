@@ -5,27 +5,17 @@
  */
 package api.service;
 
-import api.repo.Socios;
+import api.model.Socios;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author Unknow
  */
 @Stateless
-@Path("socios")
 public class SociosFacadeREST extends AbstractFacade<Socios> {
 
     @PersistenceContext(unitName = "api_rest_war_1.0-SNAPSHOTPU")
@@ -35,50 +25,35 @@ public class SociosFacadeREST extends AbstractFacade<Socios> {
         super(Socios.class);
     }
 
-    @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Socios entity) {
         super.create(entity);
     }
 
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Socios entity) {
+    public void edit(Integer id, Socios entity) {
         super.edit(entity);
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(Integer id) {
         super.remove(super.find(id));
     }
 
-    @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Socios find(@PathParam("id") Integer id) {
-        return super.find(id);
+    public List<Socios> findByCnpj(String cnpj) {
+        return super.findAll();
+    }
+     public Socios findByCpf(String cpf) {
+        return super.find(cpf);
     }
 
-    @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Socios> findAll() {
         return super.findAll();
     }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Socios> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Socios> findRange(Integer from, Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
     }
