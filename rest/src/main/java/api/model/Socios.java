@@ -17,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -26,12 +24,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "socios")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Socios.findAll", query = "SELECT s FROM Socios s")
     , @NamedQuery(name = "Socios.findById", query = "SELECT s FROM Socios s WHERE s.id = :id")
-    , @NamedQuery(name = "Socios.findByValorCota", query = "SELECT s FROM Socios s WHERE s.valorCota = :valorCota")})
+    , @NamedQuery(name = "Socios.findByValorCota", query = "SELECT s FROM Socios s WHERE s.valorDaCota = :valorDaCota")})
 public class Socios implements Serializable {
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "valor_da_cota")
+    private Double valorDaCota;
+    @JoinColumn(name = "empresa", referencedColumnName = "id")
+    @ManyToOne
+    private Empresa empresa;
+    @JoinColumn(name = "pessoa", referencedColumnName = "id")
+    @ManyToOne
+    private Pessoa pessoa;
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,16 +47,7 @@ public class Socios implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "valorCota")
-    private double valorCota;
-    @JoinColumn(name = "id_socio", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Pessoa idSocio;
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Empresa idEmpresa;
+    
 
     public Socios() {
     }
@@ -57,9 +56,11 @@ public class Socios implements Serializable {
         this.id = id;
     }
 
-    public Socios(Integer id, double valorCota) {
+    public Socios(Integer id, double valorDaCota, Empresa id_empresa, Pessoa id_pessoa) {
         this.id = id;
-        this.valorCota = valorCota;
+        this.valorDaCota = valorDaCota;
+        this.empresa = id_empresa; 
+        this.pessoa = id_pessoa;
     }
 
     public Integer getId() {
@@ -68,31 +69,7 @@ public class Socios implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public double getValorCota() {
-        return valorCota;
-    }
-
-    public void setValorCota(double valorCota) {
-        this.valorCota = valorCota;
-    }
-
-    public Pessoa getIdSocio() {
-        return idSocio;
-    }
-
-    public void setIdSocio(Pessoa idSocio) {
-        this.idSocio = idSocio;
-    }
-
-    public Empresa getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Empresa idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
+    }   
 
     @Override
     public int hashCode() {
@@ -117,6 +94,32 @@ public class Socios implements Serializable {
     @Override
     public String toString() {
         return "api.model.Socios[ id=" + id + " ]";
+    }
+
+  
+
+    public Double getValorDaCota() {
+        return valorDaCota;
+    }
+
+    public void setValorDaCota(Double valorDaCota) {
+        this.valorDaCota = valorDaCota;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
     
 }

@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.config;
-
+package api;
 
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -16,11 +14,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Unknow
  */
 @SpringBootApplication
-@EnableAutoConfiguration
-public class ApplicationConfig {
+public class Main {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ApplicationConfig.class, args);
+        System.setProperty("server.servlet.context-path", "/");
+        System.setProperty("spring.main.allow-bean-definition-overriding", "true");
+        SpringApplication.run(Main.class, args);
+        
+        
         
     }   
     

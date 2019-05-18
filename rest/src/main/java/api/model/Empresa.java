@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +21,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,7 +28,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "empresa")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Empresa.findAll", query = "SELECT e FROM Empresa e")
     , @NamedQuery(name = "Empresa.findById", query = "SELECT e FROM Empresa e WHERE e.id = :id")
@@ -66,9 +64,8 @@ public class Empresa implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "nomeFantasia")
     private String nomeFantasia;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Socios> sociosCollection;
-    private Double capitalSocial;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empresa")    
+    private Collection<Socios> socios;
 
     public Empresa() {
     }
@@ -83,7 +80,6 @@ public class Empresa implements Serializable {
         this.email = email;
         this.razaoSocial = razaoSocial;
         this.nomeFantasia = nomeFantasia;
-        this.capitalSocial = 0.0;
     }
 
     public Integer getId() {
@@ -125,23 +121,15 @@ public class Empresa implements Serializable {
     public void setNomeFantasia(String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
     }
-    public void updateCapitalSocial() {        
-        for(Socios s : sociosCollection) {
-            this.capitalSocial += s.getValorCota();
-        }
-    }
-    public Double getCapitalSocial() {        
-        return this.capitalSocial;
+    
+    public Collection<Socios> getSocios() {
+        return socios;
     }
 
-    @XmlTransient
-    public Collection<Socios> getSociosCollection() {
-        return sociosCollection;
+    public void setSocios(Collection<Socios> sociosCollection) {
+        this.socios = sociosCollection;
     }
-
-    public void setSociosCollection(Collection<Socios> sociosCollection) {
-        this.sociosCollection = sociosCollection;
-    }
+    
 
     @Override
     public int hashCode() {
@@ -171,8 +159,7 @@ public class Empresa implements Serializable {
          "email: "+ this.email+",\n"+
          "razaoSocial: "+ this.razaoSocial+",\n"+
          "nomeFantasia: "+ this.nomeFantasia+",\n"+ 
-         "socios: "+ this.sociosCollection+",\n"+
-         "capitalSocial: "+ this.getCapitalSocial()+",\n"+"}";
+         "socios: "+ this.socios+",\n";
     }
     
 }
