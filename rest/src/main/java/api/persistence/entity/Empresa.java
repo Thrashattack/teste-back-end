@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.entity;
+package api.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,8 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -29,13 +29,9 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "empresa")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Empresa.findAll", query = "SELECT e FROM Empresa e")
-    , @NamedQuery(name = "Empresa.findById", query = "SELECT e FROM Empresa e WHERE e.id = :id")
-    , @NamedQuery(name = "Empresa.findByCnpj", query = "SELECT e FROM Empresa e WHERE e.cnpj = :cnpj")
-    , @NamedQuery(name = "Empresa.findByEmail", query = "SELECT e FROM Empresa e WHERE e.email = :email")
-    , @NamedQuery(name = "Empresa.findByRazaoSocial", query = "SELECT e FROM Empresa e WHERE e.razaoSocial = :razaoSocial")
-    , @NamedQuery(name = "Empresa.findByNomeFantasia", query = "SELECT e FROM Empresa e WHERE e.nomeFantasia = :nomeFantasia")})
+    @NamedQuery(name = "Empresa.findAll", query = "SELECT e FROM Empresa e")})
 public class Empresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,43 +40,28 @@ public class Empresa implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
+    @Size(max = 255)
     @Column(name = "cnpj")
     private String cnpj;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 255)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "razaoSocial")
-    private String razaoSocial;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "nomeFantasia")
+    @Size(max = 255)
+    @Column(name = "nome_fantasia")
     private String nomeFantasia;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empresa")    
-    private Collection<Socios> socios;
+    @Size(max = 255)
+    @Column(name = "razao_social")
+    private String razaoSocial;
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Socios> socios;
 
     public Empresa() {
     }
 
     public Empresa(Integer id) {
         this.id = id;
-    }
-
-    public Empresa(Integer id, String cnpj, String email, String razaoSocial, String nomeFantasia) {
-        this.id = id;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.razaoSocial = razaoSocial;
-        this.nomeFantasia = nomeFantasia;
     }
 
     public Integer getId() {
@@ -107,6 +88,14 @@ public class Empresa implements Serializable {
         this.email = email;
     }
 
+    public String getNomeFantasia() {
+        return nomeFantasia;
+    }
+
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
+    }
+
     public String getRazaoSocial() {
         return razaoSocial;
     }
@@ -115,22 +104,13 @@ public class Empresa implements Serializable {
         this.razaoSocial = razaoSocial;
     }
 
-    public String getNomeFantasia() {
-        return nomeFantasia;
-    }
-
-    public void setNomeFantasia(String nomeFantasia) {
-        this.nomeFantasia = nomeFantasia;
-    }
-    @JsonGetter
-    public Collection<Socios> getSocios() {
+    public List<Socios> getSociosList() {
         return socios;
     }
 
-    public void setSocios(Collection<Socios> sociosCollection) {
-        this.socios = sociosCollection;
+    public void setSociosList(List<Socios> sociosList) {
+        this.socios = sociosList;
     }
-    
 
     @Override
     public int hashCode() {
@@ -154,13 +134,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "{"+
-         "id: "+ this.id+",\n"+
-         "cnpj: "+ this.cnpj+",\n"+
-         "email: "+ this.email+",\n"+
-         "razaoSocial: "+ this.razaoSocial+",\n"+
-         "nomeFantasia: "+ this.nomeFantasia+",\n"+ 
-         "socios: "+ this.socios+",\n";
+        return "api.persistence.entity.Empresa[ id=" + id + " ]";
     }
     
 }

@@ -5,11 +5,9 @@
  */
 package api.controller;
 
-import java.io.Serializable;
-import api.entity.Socios;
-import api.service.SociosService;
+import api.persistence.entity.Socios;
+import api.persistence.service.SociosService;
 import java.util.List;
-import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Unknow
  */
 @RestController
-public class SociosRestController implements Serializable {
+public class SociosRestController {
     
     @Autowired
     private SociosService sociosService;
-    private Log logger;
     
     @PostMapping("/rest/api/socios")
     public ResponseEntity<Socios> create(@RequestBody Socios socios) {
         try {
             return new ResponseEntity(sociosService.save(socios), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -47,7 +44,7 @@ public class SociosRestController implements Serializable {
         try {
             return new ResponseEntity(sociosService.edit(socios, id), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,7 +54,7 @@ public class SociosRestController implements Serializable {
             sociosService.delete(sociosService.getById(id));
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -66,7 +63,7 @@ public class SociosRestController implements Serializable {
         try {
             return new ResponseEntity(sociosService.getAll(), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -76,7 +73,7 @@ public class SociosRestController implements Serializable {
         try {
             return new ResponseEntity(sociosService.getPaginated(maxResults, maxResults), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +82,7 @@ public class SociosRestController implements Serializable {
         try {
             return new ResponseEntity(sociosService.getById(id), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.service;
+package api.persistence.service;
 
-import api.entity.Empresa;
-import api.entity.EmpresaComCapital;
-import api.repository.EmpresaRepository;
+import api.persistence.entity.Empresa;
+import api.persistence.entity.EmpresaComCapital;
+import api.persistence.repository.EmpresaRepository;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Unknow
  */
 @Service
-public class EmpresaService {
+public class EmpresaService implements Serializable {
     @Autowired
     private EmpresaRepository repository;
     
@@ -59,11 +60,13 @@ public class EmpresaService {
     @Transactional(readOnly=false)
     public Empresa edit(Empresa empresa, int id) {
         Empresa oldEmpresa = this.getById(id);
+        oldEmpresa.setId(empresa.getId());
         oldEmpresa.setCnpj(empresa.getCnpj());
         oldEmpresa.setEmail(empresa.getEmail());
         oldEmpresa.setNomeFantasia(empresa.getNomeFantasia());
         oldEmpresa.setRazaoSocial(empresa.getRazaoSocial());
-        oldEmpresa.setSocios(empresa.getSocios());
+        oldEmpresa.setSociosList(empresa.getSociosList());
+        repository.save(oldEmpresa);
         return oldEmpresa;
         
     }

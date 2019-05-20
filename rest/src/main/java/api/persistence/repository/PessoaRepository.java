@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.repository;
+package api.persistence.repository;
 
-import api.entity.Pessoa;
+import api.persistence.entity.Pessoa;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PessoaRepository extends CrudRepository<Pessoa, Integer> {
     
-    Pessoa getByCpf(String cpf);
+    Pessoa findByCpf(@Param("cpf") String cpf);
     
     
 }

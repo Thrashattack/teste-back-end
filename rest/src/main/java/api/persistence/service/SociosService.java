@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.service;
+package api.persistence.service;
 
-import api.entity.Socios;
-import api.repository.SociosRepository;
+import api.persistence.entity.Socios;
+import api.persistence.repository.SociosRepository;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Unknow
  */
 @Service
-public class SociosService {
+public class SociosService implements Serializable {
     
     @Autowired
     private SociosRepository repository;

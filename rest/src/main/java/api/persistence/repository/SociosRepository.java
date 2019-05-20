@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.repository;
+package api.persistence.repository;
 
-import api.entity.Socios;
+import api.persistence.entity.Socios;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

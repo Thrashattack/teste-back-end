@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.entity;
+package api.persistence.entity;
 
 /**
  *
@@ -12,7 +12,12 @@ package api.entity;
 public class EmpresaComCapital extends Empresa {
     private Double capitalSocial;
         public EmpresaComCapital(Empresa empresa, Double capitalSocial) {
-            super(empresa.getId(), empresa.getCnpj(), empresa.getEmail(), empresa.getNomeFantasia(), empresa.getRazaoSocial());
+            super.setId(empresa.getId());
+            super.setCnpj(empresa.getCnpj());
+            super.setEmail(empresa.getEmail());
+            super.setNomeFantasia(empresa.getNomeFantasia());
+            super.setRazaoSocial(empresa.getRazaoSocial());
+            super.setSociosList(empresa.getSociosList());
             this.capitalSocial = capitalSocial;
         }
         public Double getCapitalSocial() {            

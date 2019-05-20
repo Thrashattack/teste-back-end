@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.service;
+package api.persistence.service;
 
-import api.entity.Pessoa;
-import api.repository.PessoaRepository;
+import api.persistence.entity.Pessoa;
+import api.persistence.repository.PessoaRepository;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Unknow
  */
 @Service
-public class PessoaService {
+public class PessoaService implements Serializable {
     
     @Autowired
     private PessoaRepository repository;
@@ -33,7 +34,7 @@ public class PessoaService {
     }
     
     public Pessoa getByCpf (String cpf) {
-      return repository.getByCpf(cpf);
+      return repository.findByCpf(cpf);
     }
     public List<Pessoa> getPaginated(int maxValues, int startValue) {
          List<Pessoa> pessoas = new ArrayList<>();

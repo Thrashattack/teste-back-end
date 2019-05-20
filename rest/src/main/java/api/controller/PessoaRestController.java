@@ -5,10 +5,8 @@
  */
 package api.controller;
 
-import api.entity.Pessoa;
-import java.io.Serializable;
-import org.apache.commons.logging.Log;
-import api.service.PessoaService;
+import api.persistence.entity.Pessoa;
+import api.persistence.service.PessoaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,17 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Unknow
  */
 @RestController
-public class PessoaRestController implements Serializable {
+public class PessoaRestController {
     
     @Autowired
     private PessoaService pessoaService;
-    private Log logger;
     @PostMapping("/rest/api/pessoa")
     public ResponseEntity<Pessoa> create(@RequestBody Pessoa pessoa) {
         try {
             return new ResponseEntity(pessoaService.save(pessoa), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+           System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,7 +42,7 @@ public class PessoaRestController implements Serializable {
        try {
            return new ResponseEntity(pessoaService.edit(pessoa, id), HttpStatus.OK);           
        } catch(Exception e) {
-           logger.warn(e);
+          System.out.println(e);
            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
@@ -55,7 +52,7 @@ public class PessoaRestController implements Serializable {
            pessoaService.delete(pessoaService.getById(id));
            return new ResponseEntity(HttpStatus.OK);
        } catch (Exception e) {
-           logger.warn(e);
+          System.out.println(e);
            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
@@ -64,7 +61,7 @@ public class PessoaRestController implements Serializable {
         try {
             return new ResponseEntity(pessoaService.getAll(), HttpStatus.OK);
         } catch (Exception e) {            
-            logger.warn(e);
+           System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -73,7 +70,7 @@ public class PessoaRestController implements Serializable {
         try {
             return new ResponseEntity(pessoaService.getPaginated(maxResults, firstResult), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+           System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,16 +79,16 @@ public class PessoaRestController implements Serializable {
         try {
             return new ResponseEntity(pessoaService.getById(id), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+           System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("rest/api/pessoa/{cpf}") 
+    @GetMapping("rest/api/pessoa/cpf/{cpf}") 
     public ResponseEntity<Pessoa> findByCpf(@PathVariable("cpf") String cpf) {
         try {
             return new ResponseEntity(pessoaService.getByCpf(cpf), HttpStatus.OK);
         } catch (Exception e) {
-            logger.warn(e);
+           System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
