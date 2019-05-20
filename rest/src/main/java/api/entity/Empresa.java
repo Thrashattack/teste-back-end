@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.model;
+package api.entity;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -121,7 +122,7 @@ public class Empresa implements Serializable {
     public void setNomeFantasia(String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
     }
-    
+    @JsonGetter
     public Collection<Socios> getSocios() {
         return socios;
     }
