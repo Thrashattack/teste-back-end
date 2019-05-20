@@ -66,6 +66,13 @@ public class Empresa implements Serializable {
         this.razaoSocial = razaoSocial;
         this.socios = socios;
     }
+    
+    public Empresa(String cnpj, String email, String nomeFantasia, String razaoSocial) {
+        this.cnpj = cnpj;
+        this.email = email;
+        this.nomeFantasia = nomeFantasia;
+        this.razaoSocial = razaoSocial;
+    }
 
     public Empresa(Integer id) {
         this.id = id;

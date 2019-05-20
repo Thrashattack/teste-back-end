@@ -5,6 +5,7 @@
  */
 package api.controller;
 
+import api.persistence.dtos.SociosDTO;
 import api.persistence.entity.Socios;
 import api.persistence.service.SociosService;
 import java.util.Set;
@@ -26,13 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SociosRestController {
     
+    private final SociosService sociosService;
+    
     @Autowired
-    private SociosService sociosService;
+    public SociosRestController(SociosService service) {
+        this.sociosService = service;
+    }
+    
     
     @PostMapping("/rest/api/socios")
-    public ResponseEntity<Socios> create(@RequestBody Socios socios) {
+    public ResponseEntity<Socios> create(@RequestBody SociosDTO dto) {
         try {
-            return new ResponseEntity(sociosService.save(socios), HttpStatus.OK);
+            return new ResponseEntity(sociosService.save(dto.toSocios()), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,9 +46,9 @@ public class SociosRestController {
     }
     
     @PutMapping("/rest/api/socios/{id}")
-    public ResponseEntity<Socios> edit(@RequestBody Socios socios, @PathVariable("id")Integer id) {
+    public ResponseEntity<Socios> edit(@RequestBody SociosDTO dto, @PathVariable("id")Integer id) {
         try {
-            return new ResponseEntity(sociosService.edit(socios, id), HttpStatus.OK);
+            return new ResponseEntity(sociosService.edit(dto.toSocios(), id), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);

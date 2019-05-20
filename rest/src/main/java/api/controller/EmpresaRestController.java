@@ -5,6 +5,7 @@
  */
 package api.controller;
 
+import api.persistence.dtos.EmpresaDTO;
 import api.persistence.entity.Empresa;
 import api.persistence.service.EmpresaService;
 import java.io.Serializable;
@@ -27,22 +28,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EmpresaRestController implements Serializable {
     
+    
+    private final EmpresaService empresaService;
+    
     @Autowired
-    private EmpresaService empresaService;
+    public EmpresaRestController(EmpresaService service) {
+        this.empresaService = service;
+    }
     
     @PostMapping("/rest/api/empresa")
-    public ResponseEntity<Empresa> create (@RequestBody Empresa empresa) {
+    public ResponseEntity<Empresa> create (@RequestBody EmpresaDTO dto) {
         try {
-            return new ResponseEntity(empresaService.save(empresa), HttpStatus.OK);
+            return new ResponseEntity(empresaService.save(dto.toEmpresa()), HttpStatus.OK);
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("/rest/api/empresa/{id}")
-    public ResponseEntity<Empresa> edit(@RequestBody Empresa empresa, @PathVariable("id") Integer id) {
+    public ResponseEntity<Empresa> edit(@RequestBody EmpresaDTO dto, @PathVariable("id") Integer id) {
        try {
-           return new ResponseEntity(empresaService.edit(empresa, id), HttpStatus.OK);
+           return new ResponseEntity(empresaService.edit(dto.toEmpresa(), id), HttpStatus.OK);
        } catch(Exception e) {
            System.out.println(e.getMessage());
            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);

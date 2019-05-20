@@ -5,6 +5,7 @@
  */
 package api.controller;
 
+import api.persistence.dtos.PessoaDTO;
 import api.persistence.entity.Pessoa;
 import api.persistence.service.PessoaService;
 import java.util.Set;
@@ -26,21 +27,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PessoaRestController {
     
+    
+    private final PessoaService pessoaService;
+    
     @Autowired
-    private PessoaService pessoaService;
+    public PessoaRestController(PessoaService service) {
+        this.pessoaService = service;
+    }
     @PostMapping("/rest/api/pessoa")
-    public ResponseEntity<Pessoa> create(@RequestBody Pessoa pessoa) {
+    public ResponseEntity<Pessoa> create(@RequestBody PessoaDTO dto) {
         try {
-            return new ResponseEntity(pessoaService.save(pessoa), HttpStatus.OK);
+            return new ResponseEntity(pessoaService.save(dto.toPessoa()), HttpStatus.OK);
         } catch (Exception e) {
            System.out.println(e);
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity<Pessoa> edit(@RequestBody Pessoa pessoa, @PathVariable("id") Integer id) {
+    public ResponseEntity<Pessoa> edit(@RequestBody PessoaDTO dto, @PathVariable("id") Integer id) {
        try {
-           return new ResponseEntity(pessoaService.edit(pessoa, id), HttpStatus.OK);           
+           return new ResponseEntity(pessoaService.edit(dto.toPessoa(), id), HttpStatus.OK);           
        } catch(Exception e) {
           System.out.println(e);
            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);

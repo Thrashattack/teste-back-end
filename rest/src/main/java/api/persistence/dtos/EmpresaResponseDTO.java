@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.persistence.model;
+package api.persistence.dtos;
 
 import api.persistence.entity.Empresa;
 
@@ -11,9 +11,9 @@ import api.persistence.entity.Empresa;
  *
  * @author Unknow
  */
-public class EmpresaComCapitalDTO extends Empresa {
+public class EmpresaResponseDTO extends Empresa {
     private Double capitalSocial;
-        public EmpresaComCapitalDTO(Empresa empresa, Double capitalSocial) {
+        public EmpresaResponseDTO(Empresa empresa, Double capitalSocial) {
             super(empresa.getId(), empresa.getCnpj(), empresa.getEmail(), empresa.getNomeFantasia(), empresa.getRazaoSocial(), empresa.getSocios());
             this.capitalSocial = capitalSocial;
         }

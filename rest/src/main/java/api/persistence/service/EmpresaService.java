@@ -6,7 +6,7 @@
 package api.persistence.service;
 
 import api.persistence.entity.Empresa;
-import api.persistence.model.EmpresaComCapitalDTO;
+import api.persistence.dtos.EmpresaResponseDTO;
 import api.persistence.repository.EmpresaRepository;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,13 +29,13 @@ public class EmpresaService implements Serializable {
     
     public Empresa getById(int id) {
         Empresa empresa = repository.findById(id).get();
-        return new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
+        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
     }
     
     public Set<Empresa> getAll() {
         List<Empresa> empresasComCapital = new ArrayList<>();
         repository.findAll().forEach(empresa -> {
-            empresasComCapital.add(new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
+            empresasComCapital.add(new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
         });
         Set<Empresa> empresasComCapitalSet = new HashSet<>(empresasComCapital);
         return empresasComCapitalSet;
@@ -46,7 +46,7 @@ public class EmpresaService implements Serializable {
          for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues; ) {
             Empresa empresa = it.next(); 
             if (count >= startValue) 
-                empresasComCapital.add(new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
+                empresasComCapital.add(new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
             count++;
          }
          return new HashSet<>(empresasComCapital);
@@ -54,7 +54,7 @@ public class EmpresaService implements Serializable {
     
     public Empresa getByCnpj(String cnpj) {
         Empresa empresa = repository.findByCnpj(cnpj);
-        return new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa));        
+        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));        
     }
     public Empresa save(Empresa empresa) {
         return repository.save(empresa);

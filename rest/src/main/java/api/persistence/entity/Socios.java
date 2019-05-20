@@ -60,6 +60,12 @@ public class Socios implements Serializable {
     public Integer getId() {
         return id;
     }
+    
+    public Socios(Double valorDaCota, Empresa empresa, Pessoa pessoa) {
+        this.valorDaCota = valorDaCota;
+        this.empresa = empresa;
+        this.pessoa = pessoa;
+    }
 
     public void setId(Integer id) {
         this.id = id;
