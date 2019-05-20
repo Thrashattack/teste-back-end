@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.services;
-import api.model.*;
+package api.service;
+import api.entity.Socios;
+import api.entity.Empresa;
 import java.util.HashMap;
 import org.springframework.stereotype.Service;
 
