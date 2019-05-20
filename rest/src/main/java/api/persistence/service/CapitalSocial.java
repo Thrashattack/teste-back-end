@@ -15,19 +15,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CapitalSocial implements Serializable {
-    private static final HashMap<Empresa,Double> capitaisSociaisCache = new HashMap<>();
+   
     private static Double capitalSocial = 0.0;
     public static Double getCapitalSocial(Empresa e) {
-        if(CapitalSocial.capitaisSociaisCache.containsKey(e)) {
-            return CapitalSocial.capitaisSociaisCache.get(e);
-        }
-        
-        e.getSociosList().forEach(socio -> {
-            setTemp(socio.getValorDaCota());
-        });
-        CapitalSocial.capitaisSociaisCache.put(e, getTemp());
-        setTemp(0.0);
-        return capitalSocial;
+        CapitalSocial.setZeroTemp();        
+        e.getSocios().forEach(socio -> {
+            CapitalSocial.setTemp(socio.getValorDaCota());
+        });     
+        return CapitalSocial.getTemp();
     }
     
     private static Double getTemp() {
@@ -35,5 +30,8 @@ public class CapitalSocial implements Serializable {
     }
     private static void setTemp(Double temp) {
         CapitalSocial.capitalSocial += temp;
+    }
+    private static void setZeroTemp() {
+        CapitalSocial.capitalSocial = 0.0;
     }
 }

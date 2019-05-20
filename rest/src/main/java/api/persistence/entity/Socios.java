@@ -7,8 +7,6 @@ package api.persistence.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -50,7 +48,6 @@ public class Socios implements Serializable {
     private Empresa empresa;
     @JoinColumn(name = "pessoa", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
     private Pessoa pessoa;
 
     public Socios() {

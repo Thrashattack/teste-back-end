@@ -7,7 +7,7 @@ package api.controller;
 
 import api.persistence.entity.Pessoa;
 import api.persistence.service.PessoaService;
-import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +57,7 @@ public class PessoaRestController {
        }
     }
     @GetMapping("/rest/api/pessoa")
-    public ResponseEntity<List<Pessoa>> getAll() {
+    public ResponseEntity<Set<Pessoa>> getAll() {
         try {
             return new ResponseEntity(pessoaService.getAll(), HttpStatus.OK);
         } catch (Exception e) {            
@@ -66,7 +66,7 @@ public class PessoaRestController {
         }
     }
     @GetMapping("/rest/api/pessoa/{maxResults}/{firstResult}")
-    public ResponseEntity<List<Pessoa>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
+    public ResponseEntity<Set<Pessoa>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
         try {
             return new ResponseEntity(pessoaService.getPaginated(maxResults, firstResult), HttpStatus.OK);
         } catch (Exception e) {

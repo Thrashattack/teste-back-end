@@ -5,14 +5,12 @@
  */
 package api.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -53,11 +51,20 @@ public class Empresa implements Serializable {
     @Size(max = 255)
     @Column(name = "razao_social")
     private String razaoSocial;
-    @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Socios> socios;
+    @OneToMany(mappedBy = "empresa")
+    @JsonManagedReference   
+    private Set<Socios> socios;
 
     public Empresa() {
+    }
+    
+    public Empresa(Integer id, String cnpj, String email, String nomeFantasia, String razaoSocial, Set<Socios> socios) {
+        this.id = id;
+        this.cnpj = cnpj;
+        this.email = email;
+        this.nomeFantasia = nomeFantasia;
+        this.razaoSocial = razaoSocial;
+        this.socios = socios;
     }
 
     public Empresa(Integer id) {
@@ -104,12 +111,12 @@ public class Empresa implements Serializable {
         this.razaoSocial = razaoSocial;
     }
 
-    public List<Socios> getSociosList() {
+    public Set<Socios> getSocios() {
         return socios;
     }
 
-    public void setSociosList(List<Socios> sociosList) {
-        this.socios = sociosList;
+    public void setSocios(Set<Socios> socios) {
+        this.socios = socios;
     }
 
     @Override

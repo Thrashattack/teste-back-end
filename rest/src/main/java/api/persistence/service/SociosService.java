@@ -9,8 +9,10 @@ import api.persistence.entity.Socios;
 import api.persistence.repository.SociosRepository;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,23 +32,24 @@ public class SociosService implements Serializable {
         return repository.findById(id).get();
     }
     
-    public List<Socios> getAll() {
-       return (List<Socios>) repository.findAll();
+    public Set<Socios> getAll() {
+        List<Socios> findall = (List<Socios>) repository.findAll();
+       return new HashSet<>(findall); 
     }
     
     public Socios save(Socios pessoa) {
         return repository.save(pessoa);
     }
-    public List<Socios> getPaginated(int maxValues, int startValue) {
+    public Set<Socios> getPaginated(int maxValues, int startValue) {
          List<Socios> socios = new ArrayList<>();
          int count = 0;
-         for (Iterator<Socios> it = repository.findAll().iterator(); it.hasNext() && count <=maxValues; ) {
+         for (Iterator<Socios> it = repository.findAll().iterator(); it.hasNext() && count < maxValues; ) {
             Socios socio = it.next(); 
             if (count >= startValue) 
                 socios.add(socio);
             count++;
          }
-         return socios;
+         return new HashSet<>(socios);
     }
     @Transactional(readOnly=false)
     public Socios edit(Socios pessoa, Integer id) {

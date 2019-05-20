@@ -6,12 +6,14 @@
 package api.persistence.service;
 
 import api.persistence.entity.Empresa;
-import api.persistence.entity.EmpresaComCapital;
+import api.persistence.model.EmpresaComCapitalDTO;
 import api.persistence.repository.EmpresaRepository;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,32 +29,32 @@ public class EmpresaService implements Serializable {
     
     public Empresa getById(int id) {
         Empresa empresa = repository.findById(id).get();
-        return new EmpresaComCapital(empresa, CapitalSocial.getCapitalSocial(empresa));
+        return new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
     }
     
-    public List<Empresa> getAll() {
+    public Set<Empresa> getAll() {
         List<Empresa> empresasComCapital = new ArrayList<>();
         repository.findAll().forEach(empresa -> {
-            empresasComCapital.add(new EmpresaComCapital(empresa, CapitalSocial.getCapitalSocial(empresa)));
+            empresasComCapital.add(new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
         });
-        return empresasComCapital;
+        Set<Empresa> empresasComCapitalSet = new HashSet<>(empresasComCapital);
+        return empresasComCapitalSet;
     }
-    
-    public List<Empresa> getPaginated(int maxValues, int startValue) {
+    public Set<Empresa> getPaginated(int maxValues, int startValue) {
          List<Empresa> empresasComCapital = new ArrayList<>();
          int count = 0;
-         for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count <=maxValues; ) {
+         for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues; ) {
             Empresa empresa = it.next(); 
             if (count >= startValue) 
-                empresasComCapital.add(new EmpresaComCapital(empresa, CapitalSocial.getCapitalSocial(empresa)));
+                empresasComCapital.add(new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
             count++;
          }
-         return empresasComCapital;
+         return new HashSet<>(empresasComCapital);
     }
     
     public Empresa getByCnpj(String cnpj) {
         Empresa empresa = repository.findByCnpj(cnpj);
-        return new EmpresaComCapital(empresa, CapitalSocial.getCapitalSocial(empresa));        
+        return new EmpresaComCapitalDTO(empresa, CapitalSocial.getCapitalSocial(empresa));        
     }
     public Empresa save(Empresa empresa) {
         return repository.save(empresa);
@@ -65,7 +67,7 @@ public class EmpresaService implements Serializable {
         oldEmpresa.setEmail(empresa.getEmail());
         oldEmpresa.setNomeFantasia(empresa.getNomeFantasia());
         oldEmpresa.setRazaoSocial(empresa.getRazaoSocial());
-        oldEmpresa.setSociosList(empresa.getSociosList());
+        oldEmpresa.setSocios(empresa.getSocios());
         repository.save(oldEmpresa);
         return oldEmpresa;
         

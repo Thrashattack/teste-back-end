@@ -8,7 +8,7 @@ package api.controller;
 import api.persistence.entity.Empresa;
 import api.persistence.service.EmpresaService;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +60,7 @@ public class EmpresaRestController implements Serializable {
     }
     
     @GetMapping("/rest/api/empresa")
-     public ResponseEntity<List<Empresa>> getAllEmpresas() {
+     public ResponseEntity<Set<Empresa>> getAllEmpresas() {
         try {
             return new ResponseEntity(empresaService.getAll(), HttpStatus.OK);
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class EmpresaRestController implements Serializable {
     }
     
     @GetMapping("/rest/api/empresa/{maxResults}/{firstResult}")
-    public ResponseEntity<List<Empresa>> getPaginated(
+    public ResponseEntity<Set<Empresa>> getPaginated(
             @PathVariable("maxResults") int maxResults,
             @PathVariable("firstResult")int firstResult) {
        try {

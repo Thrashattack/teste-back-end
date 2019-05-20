@@ -5,10 +5,9 @@
  */
 package api.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,7 +53,7 @@ public class Pessoa implements Serializable {
     private String sobrenome;
     @OneToMany(mappedBy = "pessoa")
     @JsonIgnore
-    private List<Socios> sociosList;
+    private Set<Socios> sociosList;
 
     public Pessoa() {
     }
@@ -104,11 +103,11 @@ public class Pessoa implements Serializable {
     }
 
     
-    public List<Socios> getSociosList() {
+    public Set<Socios> getSociosList() {
         return sociosList;
     }
 
-    public void setSociosList(List<Socios> sociosList) {
+    public void setSociosList(Set<Socios> sociosList) {
         this.sociosList = sociosList;
     }
 

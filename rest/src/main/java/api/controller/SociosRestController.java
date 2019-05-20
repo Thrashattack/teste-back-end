@@ -7,7 +7,7 @@ package api.controller;
 
 import api.persistence.entity.Socios;
 import api.persistence.service.SociosService;
-import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +59,7 @@ public class SociosRestController {
         }
     }
     @GetMapping("/rest/api/socios")
-    public ResponseEntity<List<Socios>> getAll() {
+    public ResponseEntity<Set<Socios>> getAll() {
         try {
             return new ResponseEntity(sociosService.getAll(), HttpStatus.OK);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class SociosRestController {
     }
     
     @GetMapping("/rest/api/socios/{maxResults}/{firstResult}") 
-    public ResponseEntity<List<Socios>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
+    public ResponseEntity<Set<Socios>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
         try {
             return new ResponseEntity(sociosService.getPaginated(maxResults, maxResults), HttpStatus.OK);
         } catch (Exception e) {
