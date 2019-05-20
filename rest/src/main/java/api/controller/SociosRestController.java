@@ -57,7 +57,7 @@ public class SociosRestController {
     @DeleteMapping("/rest/api/socios/{id}")
     public ResponseEntity destroy(@PathVariable("id") Integer id) {
         try {
-            sociosService.delete(sociosService.getById(id));
+            sociosService.delete(id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);

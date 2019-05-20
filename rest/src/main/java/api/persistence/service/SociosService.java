@@ -61,7 +61,7 @@ public class SociosService implements Serializable {
         return oldPessoa;
         
     }
-    public void delete(Socios pessoa) {
-        repository.delete(pessoa);
+    public void delete(Integer id) {
+        repository.deleteById(id);
     }
 }

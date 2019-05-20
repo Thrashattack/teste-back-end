@@ -55,7 +55,7 @@ public class PessoaRestController {
     @DeleteMapping("/rest/api/pessoa/{id}")
     public ResponseEntity destroy(@PathVariable("id") Integer id) {
        try {
-           pessoaService.delete(pessoaService.getById(id));
+           pessoaService.delete(id);
            return new ResponseEntity(HttpStatus.OK);
        } catch (Exception e) {
           System.out.println(e);

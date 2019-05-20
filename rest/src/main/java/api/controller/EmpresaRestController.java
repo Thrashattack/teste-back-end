@@ -9,6 +9,7 @@ import api.persistence.dtos.EmpresaDTO;
 import api.persistence.entity.Empresa;
 import api.persistence.service.EmpresaService;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,7 @@ public class EmpresaRestController implements Serializable {
     @DeleteMapping("/rest/api/empresa/{id}")
     public ResponseEntity destroy(@PathVariable("id") Integer id) {
         try {
-            empresaService.delete(empresaService.getById(id));
+            empresaService.delete(id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());

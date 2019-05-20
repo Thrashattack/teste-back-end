@@ -64,8 +64,8 @@ public class PessoaService implements Serializable {
         return oldPessoa;
         
     }
-    public void delete(Pessoa pessoa) {
-        repository.delete(pessoa);
+    public void delete(Integer id) {
+        repository.deleteById(id);
     }
     
 }

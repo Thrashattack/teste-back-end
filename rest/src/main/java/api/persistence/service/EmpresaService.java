@@ -72,7 +72,7 @@ public class EmpresaService implements Serializable {
         return oldEmpresa;
         
     }
-    public void delete(Empresa empresa) {
-        repository.delete(empresa);
+    public void delete(Integer id) {       
+        repository.deleteById(id);
     }
 }
