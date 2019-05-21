@@ -6,9 +6,9 @@
 package api.controller;
 
 import api.persistence.dtos.PessoaDTO;
-import api.persistence.entity.Pessoa;
 import api.persistence.service.PessoaService;
 import java.util.Set;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,70 +35,35 @@ public class PessoaRestController {
         this.pessoaService = service;
     }
     @PostMapping("/rest/api/pessoa")
-    public ResponseEntity<Pessoa> create(@RequestBody PessoaDTO dto) {
-        try {
-            return new ResponseEntity(pessoaService.save(dto.toPessoa()), HttpStatus.OK);
-        } catch (Exception e) {
-           System.out.println(e);
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaDTO dto) {
+        return new ResponseEntity(pessoaService.save(dto.toPessoa()), HttpStatus.OK);        
     }
     @PutMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity<Pessoa> edit(@RequestBody PessoaDTO dto, @PathVariable("id") Integer id) {
-       try {
-           return new ResponseEntity(pessoaService.edit(dto.toPessoa(), id), HttpStatus.OK);           
-       } catch(Exception e) {
-          System.out.println(e);
-           return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+    public ResponseEntity<PessoaDTO> edit(@RequestBody @Valid PessoaDTO dto, @PathVariable("id") Integer id) {       
+        return new ResponseEntity(pessoaService.edit(dto.toPessoa(), id), HttpStatus.OK); 
     }
     @DeleteMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity destroy(@PathVariable("id") Integer id) {
-       try {
-           pessoaService.delete(id);
-           return new ResponseEntity(HttpStatus.OK);
-       } catch (Exception e) {
-          System.out.println(e);
-           return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+    public ResponseEntity destroy(@PathVariable("id") Integer id) {      
+        pessoaService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);       
     }
     @GetMapping("/rest/api/pessoa")
-    public ResponseEntity<Set<Pessoa>> getAll() {
-        try {
-            return new ResponseEntity(pessoaService.getAll(), HttpStatus.OK);
-        } catch (Exception e) {            
-           System.out.println(e);
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Set<PessoaDTO>> getAll() {
+        return new ResponseEntity(pessoaService.getAll(), HttpStatus.OK);       
     }
     @GetMapping("/rest/api/pessoa/{maxResults}/{firstResult}")
-    public ResponseEntity<Set<Pessoa>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
-        try {
-            return new ResponseEntity(pessoaService.getPaginated(maxResults, firstResult), HttpStatus.OK);
-        } catch (Exception e) {
-           System.out.println(e);
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Set<PessoaDTO>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {        
+        return new ResponseEntity(pessoaService.getPaginated(maxResults, firstResult), HttpStatus.OK);        
     }
     @GetMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity<Pessoa> findPessoa(@PathVariable ("id") Integer id) {        
-        try {
-            return new ResponseEntity(pessoaService.getById(id), HttpStatus.OK);
-        } catch (Exception e) {
-           System.out.println(e);
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<PessoaDTO> findPessoa(@PathVariable ("id") Integer id) {  
+        return new ResponseEntity(pessoaService.getById(id), HttpStatus.OK);       
     }
     @GetMapping("rest/api/pessoa/cpf/{cpf}") 
-    public ResponseEntity<Pessoa> findByCpf(@PathVariable("cpf") String cpf) {
-        try {
-            return new ResponseEntity(pessoaService.getByCpf(cpf), HttpStatus.OK);
-        } catch (Exception e) {
-           System.out.println(e);
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<PessoaDTO> findByCpf(@PathVariable("cpf") String cpf) {        
+        return new ResponseEntity(pessoaService.getByCpf(cpf), HttpStatus.OK);       
     }
-
+    @GetMapping("rest/api/pessoa/count")
     public ResponseEntity<Integer> getPessoaCount() {
         return new ResponseEntity(pessoaService.getAll().size(), HttpStatus.OK);
     }

@@ -24,14 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class EmpresaService implements Serializable {
+
     @Autowired
     private EmpresaRepository repository;
-    
+
     public Empresa getById(int id) {
         Empresa empresa = repository.findById(id).get();
         return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
     }
-    
+
     public Set<Empresa> getAll() {
         List<Empresa> empresasComCapital = new ArrayList<>();
         repository.findAll().forEach(empresa -> {
@@ -40,26 +41,30 @@ public class EmpresaService implements Serializable {
         Set<Empresa> empresasComCapitalSet = new HashSet<>(empresasComCapital);
         return empresasComCapitalSet;
     }
+
     public Set<Empresa> getPaginated(int maxValues, int startValue) {
-         List<Empresa> empresasComCapital = new ArrayList<>();
-         int count = 0;
-         for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues; ) {
-            Empresa empresa = it.next(); 
-            if (count >= startValue) 
+        List<Empresa> empresasComCapital = new ArrayList<>();
+        int count = 0;
+        for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues;) {
+            Empresa empresa = it.next();
+            if (count >= startValue) {
                 empresasComCapital.add(new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
+            }
             count++;
-         }
-         return new HashSet<>(empresasComCapital);
+        }
+        return new HashSet<>(empresasComCapital);
     }
-    
+
     public Empresa getByCnpj(String cnpj) {
         Empresa empresa = repository.findByCnpj(cnpj);
-        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));        
+        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
     }
+
     public Empresa save(Empresa empresa) {
         return repository.save(empresa);
     }
-    @Transactional(readOnly=false)
+
+    @Transactional(readOnly = false)
     public Empresa edit(Empresa empresa, int id) {
         Empresa oldEmpresa = this.getById(id);
         oldEmpresa.setId(empresa.getId());
@@ -70,9 +75,10 @@ public class EmpresaService implements Serializable {
         oldEmpresa.setSocios(empresa.getSocios());
         repository.save(oldEmpresa);
         return oldEmpresa;
-        
+
     }
-    public void delete(Integer id) {       
+
+    public void delete(Integer id) {
         repository.deleteById(id);
     }
 }

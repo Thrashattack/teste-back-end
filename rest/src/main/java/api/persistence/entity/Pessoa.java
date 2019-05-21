@@ -8,18 +8,16 @@ package api.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -28,27 +26,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "pessoa")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Pessoa.findAll", query = "SELECT p FROM Pessoa p")})
+@Getter
+@Setter
 public class Pessoa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 255)
+
     @Column(name = "cpf")
     private String cpf;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 255)
+
     @Column(name = "email")
     private String email;
-    @Size(max = 255)
+
     @Column(name = "nome")
     private String nome;
-    @Size(max = 255)
+
     @Column(name = "sobrenome")
     private String sobrenome;
     @OneToMany(mappedBy = "pessoa")
@@ -61,61 +57,12 @@ public class Pessoa implements Serializable {
     public Pessoa(Integer id) {
         this.id = id;
     }
-    
+
     public Pessoa(String cpf, String email, String nome, String sobrenome) {
         this.cpf = cpf;
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSobrenome() {
-        return sobrenome;
-    }
-
-    public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
-    }
-
-    
-    public Set<Socios> getSociosList() {
-        return sociosList;
-    }
-
-    public void setSociosList(Set<Socios> sociosList) {
-        this.sociosList = sociosList;
     }
 
     @Override
@@ -142,5 +89,5 @@ public class Pessoa implements Serializable {
     public String toString() {
         return "api.persistence.entity.Pessoa[ id=" + id + " ]";
     }
-    
+
 }

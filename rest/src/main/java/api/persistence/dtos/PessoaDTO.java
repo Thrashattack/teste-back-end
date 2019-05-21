@@ -6,7 +6,9 @@
 package api.persistence.dtos;
 
 import api.persistence.entity.Pessoa;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,17 +19,27 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PessoaDTO {
-    @NotNull(message = "O CPF NAO PODE ESTAR VAZIO!")
+
+    @NotBlank(message = "O CPF NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
     private String cpf;
-    @NotNull(message = "O Email NAO PODE ESTAR VAZIO!")
-    private String email;    
-    @NotNull(message = "O Nome NAO PODE ESTAR VAZIO!")
-    private String nome;    
-    @NotNull(message = "O Sobrenome NAO PODE ESTAR VAZIO!")
+    @NotBlank(message = "O Email NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
+    @Email
+    private String email;
+    @NotBlank(message = "O Nome NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
+    private String nome;
+    @NotBlank(message = "O Sobrenome NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
     private String sobrenome;
-    
+
+    public PessoaDTO() {
+
+    }
+
     public Pessoa toPessoa() {
         return new Pessoa(cpf, email, nome, sobrenome);
     }
-    
+
 }

@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 package api.persistence.dtos;
+
 import api.persistence.entity.Empresa;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
 
 /**
  *
@@ -17,17 +19,27 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmpresaDTO {
-    @NotNull(message = "O CNPJ NAO PODE ESTAR VAZIO!")
+
+    @NotBlank(message = "O CNPJ NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
     private String cnpj;
-    @NotNull (message = "O EMAIL NAO PODE ESTAR VAZIO!")
+    @NotBlank(message = "O EMAIL NAO PODE ESTAR VAZIO!")
+    @Email
+    @Size(max = 255)
     private String email;
-    @NotNull (message = "A RAZAO SOCIAL NAO PODE ESTAR VAZIA!")
+    @NotBlank(message = "A RAZAO SOCIAL NAO PODE ESTAR VAZIA!")
+    @Size(max = 255)
     private String razaoSocial;
-    @NotNull (message = "O NOME FANTASIA NAO PODE ESTAR VAZIO!")
+    @NotBlank(message = "O NOME FANTASIA NAO PODE ESTAR VAZIO!")
+    @Size(max = 255)
     private String nomeFantasia;
-    
+
+    public EmpresaDTO() {
+
+    }
+
     public Empresa toEmpresa() {
-       return new Empresa(cnpj, email, razaoSocial, nomeFantasia);
-        
+        return new Empresa(cnpj, email, razaoSocial, nomeFantasia);
+
     }
 }

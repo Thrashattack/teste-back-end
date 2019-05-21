@@ -5,10 +5,9 @@
  */
 package api.persistence.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,10 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -29,14 +28,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "socios")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Socios.findAll", query = "SELECT s FROM Socios s")})
+@Getter
+@Setter
 public class Socios implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -60,38 +58,10 @@ public class Socios implements Serializable {
     public Integer getId() {
         return id;
     }
-    
+
     public Socios(Double valorDaCota, Empresa empresa, Pessoa pessoa) {
         this.valorDaCota = valorDaCota;
         this.empresa = empresa;
-        this.pessoa = pessoa;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Double getValorDaCota() {
-        return valorDaCota;
-    }
-
-    public void setValorDaCota(Double valorDaCota) {
-        this.valorDaCota = valorDaCota;
-    }
-    
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-    
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
 
@@ -119,5 +89,5 @@ public class Socios implements Serializable {
     public String toString() {
         return "api.persistence.entity.Socios[ id=" + id + " ]";
     }
-    
+
 }

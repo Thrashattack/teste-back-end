@@ -23,44 +23,47 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class SociosService implements Serializable {
-    
+
     @Autowired
     private SociosRepository repository;
-    
-    
+
     public Socios getById(int id) {
         return repository.findById(id).get();
     }
-    
+
     public Set<Socios> getAll() {
         List<Socios> findall = (List<Socios>) repository.findAll();
-       return new HashSet<>(findall); 
+        return new HashSet<>(findall);
     }
-    
+
     public Socios save(Socios pessoa) {
         return repository.save(pessoa);
     }
+
     public Set<Socios> getPaginated(int maxValues, int startValue) {
-         List<Socios> socios = new ArrayList<>();
-         int count = 0;
-         for (Iterator<Socios> it = repository.findAll().iterator(); it.hasNext() && count < maxValues; ) {
-            Socios socio = it.next(); 
-            if (count >= startValue) 
+        List<Socios> socios = new ArrayList<>();
+        int count = 0;
+        for (Iterator<Socios> it = repository.findAll().iterator(); it.hasNext() && count < maxValues;) {
+            Socios socio = it.next();
+            if (count >= startValue) {
                 socios.add(socio);
+            }
             count++;
-         }
-         return new HashSet<>(socios);
+        }
+        return new HashSet<>(socios);
     }
-    @Transactional(readOnly=false)
+
+    @Transactional(readOnly = false)
     public Socios edit(Socios pessoa, Integer id) {
         Socios oldPessoa = this.getById(id);
         oldPessoa.setEmpresa(pessoa.getEmpresa());
         oldPessoa.setPessoa(pessoa.getPessoa());
         oldPessoa.setValorDaCota(pessoa.getValorDaCota());
-        
+
         return oldPessoa;
-        
+
     }
+
     public void delete(Integer id) {
         repository.deleteById(id);
     }
