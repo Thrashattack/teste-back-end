@@ -6,18 +6,17 @@
 package api.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,45 +25,39 @@ import lombok.Setter;
  * @author Unknow
  */
 @Entity
-@Table(name = "socios")
-@XmlRootElement
 @Getter
 @Setter
 public class Socios implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
     @Column(name = "valor_da_cota")
-    private Double valorDaCota;
+    private BigDecimal valorDaCota;
+
+    private static final long serialVersionUID = 1L;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Long id;
+    @JoinColumn(name = "pessoa", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private Pessoa pessoa;
     @JoinColumn(name = "empresa", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonBackReference
     private Empresa empresa;
-    @JoinColumn(name = "pessoa", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Pessoa pessoa;
 
     public Socios() {
     }
 
-    public Socios(Integer id) {
+    public Socios(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Socios(Double valorDaCota, Empresa empresa, Pessoa pessoa) {
+    public Socios (BigDecimal valorDaCota, Empresa empresa, Pessoa pessoa) {
         this.valorDaCota = valorDaCota;
         this.empresa = empresa;
         this.pessoa = pessoa;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -79,15 +72,13 @@ public class Socios implements Serializable {
             return false;
         }
         Socios other = (Socios) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
         return "api.persistence.entity.Socios[ id=" + id + " ]";
     }
-
 }
+
+

@@ -5,8 +5,6 @@
  */
 package api.persistence.dtos;
 
-import api.persistence.entity.Empresa;
-import api.persistence.entity.Pessoa;
 import api.persistence.entity.Socios;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -18,17 +16,17 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SociosDTO {
+public class SociosResponseDTO {
     
+    private String nomeSocio;
+    private String cpfSocio;
+    private String empresaCnpj;
     private BigDecimal valorDaCota;
-    private Empresa empresa;
-    private Pessoa pessoa;
-
-    public SociosDTO() {
-
-    }
-
-    public Socios toSocios() {
-        return new Socios(valorDaCota, empresa, pessoa);
+    
+    public SociosResponseDTO(Socios socio) {
+        this.nomeSocio = socio.getPessoa().getNome();
+        this.cpfSocio = socio.getPessoa().getCpf();
+        this.empresaCnpj = socio.getEmpresa().getCnpj();
+        this.valorDaCota = socio.getValorDaCota();
     }
 }

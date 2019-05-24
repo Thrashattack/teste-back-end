@@ -14,10 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Unknow
  */
 @RestController
+@RequestMapping("/rest/api/pessoa")
 public class PessoaRestController {
     
     
@@ -34,36 +36,36 @@ public class PessoaRestController {
     public PessoaRestController(PessoaService service) {
         this.pessoaService = service;
     }
-    @PostMapping("/rest/api/pessoa")
+    @PostMapping
     public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaDTO dto) {
         return new ResponseEntity(pessoaService.save(dto.toPessoa()), HttpStatus.OK);        
     }
-    @PutMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity<PessoaDTO> edit(@RequestBody @Valid PessoaDTO dto, @PathVariable("id") Integer id) {       
+    @PutMapping
+    public ResponseEntity<PessoaDTO> edit(@RequestBody @Valid PessoaDTO dto, @RequestParam Long id) {       
         return new ResponseEntity(pessoaService.edit(dto.toPessoa(), id), HttpStatus.OK); 
     }
-    @DeleteMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity destroy(@PathVariable("id") Integer id) {      
+    @DeleteMapping
+    public ResponseEntity destroy(@RequestParam Long id) {      
         pessoaService.delete(id);
         return new ResponseEntity(HttpStatus.OK);       
     }
-    @GetMapping("/rest/api/pessoa")
+    @GetMapping
     public ResponseEntity<Set<PessoaDTO>> getAll() {
         return new ResponseEntity(pessoaService.getAll(), HttpStatus.OK);       
     }
-    @GetMapping("/rest/api/pessoa/{maxResults}/{firstResult}")
-    public ResponseEntity<Set<PessoaDTO>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {        
-        return new ResponseEntity(pessoaService.getPaginated(maxResults, firstResult), HttpStatus.OK);        
+    @GetMapping("/paginated")
+    public ResponseEntity<Set<PessoaDTO>> getPaginated(@RequestParam int page, @RequestParam int elements) {        
+        return new ResponseEntity(pessoaService.getPaginated(page, elements), HttpStatus.OK);        
     }
-    @GetMapping("/rest/api/pessoa/{id}")
-    public ResponseEntity<PessoaDTO> findPessoa(@PathVariable ("id") Integer id) {  
+    @GetMapping("/id")
+    public ResponseEntity<PessoaDTO> findPessoa(@RequestParam Long id) {  
         return new ResponseEntity(pessoaService.getById(id), HttpStatus.OK);       
     }
-    @GetMapping("rest/api/pessoa/cpf/{cpf}") 
-    public ResponseEntity<PessoaDTO> findByCpf(@PathVariable("cpf") String cpf) {        
+    @GetMapping("/cpf")
+    public ResponseEntity<PessoaDTO> findByCpf(@RequestParam String cpf) {        
         return new ResponseEntity(pessoaService.getByCpf(cpf), HttpStatus.OK);       
     }
-    @GetMapping("rest/api/pessoa/count")
+    @GetMapping("/count")
     public ResponseEntity<Integer> getPessoaCount() {
         return new ResponseEntity(pessoaService.getAll().size(), HttpStatus.OK);
     }

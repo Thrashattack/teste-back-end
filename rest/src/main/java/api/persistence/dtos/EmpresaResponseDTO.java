@@ -6,25 +6,35 @@
 package api.persistence.dtos;
 
 import api.persistence.entity.Empresa;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author Unknow
+ * 
  */
-public class EmpresaResponseDTO extends Empresa {
+@Getter
+@Setter
+public class EmpresaResponseDTO {
 
-    private Double capitalSocial;
+    
+    private String cnpj, email, nomeFantasia, razaoSocial;
+    private Set<SociosResponseDTO> socios;
+    private BigDecimal capitalSocial;
 
-    public EmpresaResponseDTO(Empresa empresa, Double capitalSocial) {
-        super(empresa.getId(), empresa.getCnpj(), empresa.getEmail(), empresa.getNomeFantasia(), empresa.getRazaoSocial(), empresa.getSocios());
-        this.capitalSocial = capitalSocial;
-    }
-
-    public Double getCapitalSocial() {
-        return this.capitalSocial;
-    }
-
-    public void setCapitalSocial(Double c) {
-        this.capitalSocial = c;
+    public EmpresaResponseDTO(Empresa empresa, BigDecimal capital) {
+        this.socios = new HashSet<>();
+        this.cnpj = empresa.getCnpj();
+        this.email = empresa.getEmail();
+        this.nomeFantasia = empresa.getNomeFantasia();
+        this.razaoSocial = empresa.getRazaoSocial();
+        empresa.getSocios().forEach(socio ->{
+            this.socios.add(new SociosResponseDTO(socio));
+        });        
+        this.capitalSocial = capital;
     }
 }

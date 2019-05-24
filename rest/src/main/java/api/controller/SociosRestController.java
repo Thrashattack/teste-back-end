@@ -6,18 +6,21 @@
 package api.controller;
 
 import api.persistence.dtos.SociosDTO;
+import api.persistence.dtos.SociosResponseDTO;
 import api.persistence.entity.Socios;
 import api.persistence.service.SociosService;
+import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Unknow
  */
 @RestController
+@RequestMapping("/rest/api/socios")
 public class SociosRestController {
 
     private final SociosService sociosService;
@@ -34,38 +38,46 @@ public class SociosRestController {
         this.sociosService = service;
     }
 
-    @PostMapping("/rest/api/socios")
-    public ResponseEntity<SociosDTO> create(@RequestBody SociosDTO dto) {
-        return new ResponseEntity(sociosService.save(dto.toSocios()), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<SociosResponseDTO> create(@RequestBody SociosDTO dto) {
+        return new ResponseEntity(new SociosResponseDTO(sociosService.save(dto.toSocios())), HttpStatus.OK);
     }
 
-    @PutMapping("/rest/api/socios/{id}")
-    public ResponseEntity<SociosDTO> edit(@RequestBody SociosDTO dto, @PathVariable("id") Integer id) {
-        return new ResponseEntity(sociosService.edit(dto.toSocios(), id), HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<SociosResponseDTO> edit(@RequestBody SociosDTO dto, @RequestParam Long id) {
+        return new ResponseEntity(new SociosResponseDTO(sociosService.edit(dto.toSocios(), id)), HttpStatus.OK);
     }
 
-    @DeleteMapping("/rest/api/socios/{id}")
-    public ResponseEntity destroy(@PathVariable("id") Integer id) {
+    @DeleteMapping
+    public ResponseEntity destroy(@RequestParam Long id) {
         sociosService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/rest/api/socios")
-    public ResponseEntity<Set<Socios>> getAll() {
-        return new ResponseEntity(sociosService.getAll(), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Set<SociosResponseDTO>> getAll() {
+        Set<SociosResponseDTO> socios = new HashSet<>();
+        sociosService.getAll().forEach(socio -> {
+            socios.add(new SociosResponseDTO(socio));
+        });
+        return new ResponseEntity(socios, HttpStatus.OK);
     }
 
-    @GetMapping("/rest/api/socios/{maxResults}/{firstResult}")
-    public ResponseEntity<Set<Socios>> getPaginated(@PathVariable("maxResults") int maxResults, @PathVariable("firstResult") int firstResult) {
-        return new ResponseEntity(sociosService.getPaginated(maxResults, maxResults), HttpStatus.OK);
+    @GetMapping("/paginated")
+    public ResponseEntity<Set<SociosResponseDTO>> getPaginated(@RequestParam int page, @RequestParam int elements) {
+        Set<SociosResponseDTO> socios = new HashSet<>();
+        sociosService.getPaginated(page, elements).forEach(socio -> {
+            socios.add(new SociosResponseDTO(socio));
+        });
+        return new ResponseEntity(socios, HttpStatus.OK);
     }
 
-    @GetMapping("/rest/api/socios/{id}")
-    public ResponseEntity<Socios> findSocios(@PathVariable("id") Integer id) {
-        return new ResponseEntity(sociosService.getById(id), HttpStatus.OK);
+    @GetMapping("/id")
+    public ResponseEntity<SociosResponseDTO> findSocios(@RequestParam Long id) {
+        return new ResponseEntity(new SociosResponseDTO(sociosService.getById(id)), HttpStatus.OK);
     }
 
-    @GetMapping("rest/api/socios/count")
+    @GetMapping("/count")
     public ResponseEntity<Integer> getSociosCount() {
         return new ResponseEntity(sociosService.getAll().size(), HttpStatus.OK);
     }

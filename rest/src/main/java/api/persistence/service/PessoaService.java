@@ -8,12 +8,10 @@ package api.persistence.service;
 import api.persistence.entity.Pessoa;
 import api.persistence.repository.PessoaRepository;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,30 +25,20 @@ public class PessoaService implements Serializable {
     @Autowired
     private PessoaRepository repository;
 
-    public Pessoa getById(int id) {
+    public Pessoa getById(Long id) {
         return repository.findById(id).get();
     }
 
     public Set<Pessoa> getAll() {
-        List<Pessoa> findall = (List<Pessoa>) repository.findAll();
-        return new HashSet<>(findall);
+        return new HashSet<>(repository.findAll());
     }
 
     public Pessoa getByCpf(String cpf) {
         return repository.findByCpf(cpf);
     }
 
-    public Set<Pessoa> getPaginated(int maxValues, int startValue) {
-        List<Pessoa> pessoas = new ArrayList<>();
-        int count = 0;
-        for (Iterator<Pessoa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues;) {
-            Pessoa pessoa = it.next();
-            if (count >= startValue) {
-                pessoas.add(pessoa);
-            }
-            count++;
-        }
-        return new HashSet<>(pessoas);
+    public Set<Pessoa> getPaginated(int page, int elements) {            
+        return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
     public Pessoa save(Pessoa pessoa) {
@@ -58,7 +46,7 @@ public class PessoaService implements Serializable {
     }
 
     @Transactional(readOnly = false)
-    public Pessoa edit(Pessoa pessoa, Integer id) {
+    public Pessoa edit(Pessoa pessoa, Long id) {
         Pessoa oldPessoa = this.getById(id);
         oldPessoa.setCpf(pessoa.getCpf());
         oldPessoa.setEmail(pessoa.getEmail());
@@ -69,7 +57,7 @@ public class PessoaService implements Serializable {
 
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 

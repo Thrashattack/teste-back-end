@@ -8,12 +8,10 @@ package api.persistence.service;
 import api.persistence.entity.Socios;
 import api.persistence.repository.SociosRepository;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,34 +25,24 @@ public class SociosService implements Serializable {
     @Autowired
     private SociosRepository repository;
 
-    public Socios getById(int id) {
+    public Socios getById(Long id) {
         return repository.findById(id).get();
     }
 
     public Set<Socios> getAll() {
-        List<Socios> findall = (List<Socios>) repository.findAll();
-        return new HashSet<>(findall);
+        return new HashSet<>(repository.findAll());
     }
 
     public Socios save(Socios pessoa) {
         return repository.save(pessoa);
     }
 
-    public Set<Socios> getPaginated(int maxValues, int startValue) {
-        List<Socios> socios = new ArrayList<>();
-        int count = 0;
-        for (Iterator<Socios> it = repository.findAll().iterator(); it.hasNext() && count < maxValues;) {
-            Socios socio = it.next();
-            if (count >= startValue) {
-                socios.add(socio);
-            }
-            count++;
-        }
-        return new HashSet<>(socios);
+    public Set<Socios> getPaginated(int page, int elements) {        
+        return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
     @Transactional(readOnly = false)
-    public Socios edit(Socios pessoa, Integer id) {
+    public Socios edit(Socios pessoa, Long id) {
         Socios oldPessoa = this.getById(id);
         oldPessoa.setEmpresa(pessoa.getEmpresa());
         oldPessoa.setPessoa(pessoa.getPessoa());
@@ -64,7 +52,7 @@ public class SociosService implements Serializable {
 
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 }

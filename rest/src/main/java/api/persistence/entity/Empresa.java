@@ -5,17 +5,18 @@
  */
 package api.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,29 +25,29 @@ import lombok.Setter;
  * @author Unknow
  */
 @Entity
-@Table(name = "empresa")
-@XmlRootElement
+@AllArgsConstructor
 @Getter
 @Setter
 public class Empresa implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
+    
     @Column(name = "cnpj")
     private String cnpj;
-
+    
     @Column(name = "email")
     private String email;
-
+    
     @Column(name = "nome_fantasia")
     private String nomeFantasia;
-
+  
     @Column(name = "razao_social")
     private String razaoSocial;
+
+    private static final long serialVersionUID = 1L;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Long id;
     @OneToMany(mappedBy = "empresa")
     @JsonManagedReference
     private Set<Socios> socios;
@@ -54,26 +55,18 @@ public class Empresa implements Serializable {
     public Empresa() {
     }
 
-    public Empresa(Integer id, String cnpj, String email, String nomeFantasia, String razaoSocial, Set<Socios> socios) {
-        this.id = id;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.nomeFantasia = nomeFantasia;
-        this.razaoSocial = razaoSocial;
-        this.socios = socios;
-    }
-
-    public Empresa(String cnpj, String email, String nomeFantasia, String razaoSocial) {
-        this.cnpj = cnpj;
-        this.email = email;
-        this.nomeFantasia = nomeFantasia;
-        this.razaoSocial = razaoSocial;
-    }
-
-    public Empresa(Integer id) {
+    public Empresa(Long id) {
         this.id = id;
     }
-
+    
+    public Empresa (String cnpj, String email, String razaoSocial, String nomeFantasia) {
+        this.cnpj = cnpj;
+        this.email = email;
+        this.razaoSocial = razaoSocial;
+        this.nomeFantasia = nomeFantasia;
+    }
+    
+   
     @Override
     public int hashCode() {
         int hash = 0;

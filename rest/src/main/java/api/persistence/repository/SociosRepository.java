@@ -6,7 +6,7 @@
 package api.persistence.repository;
 
 import api.persistence.entity.Socios;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author Unknow
  */
 @Repository
-public interface SociosRepository extends CrudRepository<Socios, Integer> {
+public interface SociosRepository extends JpaRepository<Socios, Long> {
     
 }

@@ -6,15 +6,12 @@
 package api.persistence.service;
 
 import api.persistence.entity.Empresa;
-import api.persistence.dtos.EmpresaResponseDTO;
 import api.persistence.repository.EmpresaRepository;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,36 +25,20 @@ public class EmpresaService implements Serializable {
     @Autowired
     private EmpresaRepository repository;
 
-    public Empresa getById(int id) {
-        Empresa empresa = repository.findById(id).get();
-        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
+    public Empresa getById(Long id) {        
+        return repository.findById(id).get();        
     }
 
     public Set<Empresa> getAll() {
-        List<Empresa> empresasComCapital = new ArrayList<>();
-        repository.findAll().forEach(empresa -> {
-            empresasComCapital.add(new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
-        });
-        Set<Empresa> empresasComCapitalSet = new HashSet<>(empresasComCapital);
-        return empresasComCapitalSet;
+        return new HashSet<>(repository.findAll());        
     }
 
-    public Set<Empresa> getPaginated(int maxValues, int startValue) {
-        List<Empresa> empresasComCapital = new ArrayList<>();
-        int count = 0;
-        for (Iterator<Empresa> it = repository.findAll().iterator(); it.hasNext() && count < maxValues;) {
-            Empresa empresa = it.next();
-            if (count >= startValue) {
-                empresasComCapital.add(new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa)));
-            }
-            count++;
-        }
-        return new HashSet<>(empresasComCapital);
+    public Set<Empresa> getPaginated(int page, int elements) {                
+        return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
-    public Empresa getByCnpj(String cnpj) {
-        Empresa empresa = repository.findByCnpj(cnpj);
-        return new EmpresaResponseDTO(empresa, CapitalSocial.getCapitalSocial(empresa));
+    public Empresa getByCnpj(String cnpj) {        
+        return repository.findByCnpj(cnpj);
     }
 
     public Empresa save(Empresa empresa) {
@@ -65,8 +46,8 @@ public class EmpresaService implements Serializable {
     }
 
     @Transactional(readOnly = false)
-    public Empresa edit(Empresa empresa, int id) {
-        Empresa oldEmpresa = this.getById(id);
+    public Empresa edit(Empresa empresa, Long id) {
+        Empresa oldEmpresa = repository.findById(id).get();
         oldEmpresa.setId(empresa.getId());
         oldEmpresa.setCnpj(empresa.getCnpj());
         oldEmpresa.setEmail(empresa.getEmail());
@@ -78,7 +59,7 @@ public class EmpresaService implements Serializable {
 
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 }

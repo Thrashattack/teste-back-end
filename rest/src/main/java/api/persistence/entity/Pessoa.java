@@ -7,15 +7,14 @@ package api.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Set;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,40 +23,40 @@ import lombok.Setter;
  * @author Unknow
  */
 @Entity
-@Table(name = "pessoa")
-@XmlRootElement
 @Getter
 @Setter
 public class Pessoa implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
+    
     @Column(name = "cpf")
     private String cpf;
-
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    
     @Column(name = "email")
     private String email;
-
+    
     @Column(name = "nome")
     private String nome;
-
+    
     @Column(name = "sobrenome")
     private String sobrenome;
-    @OneToMany(mappedBy = "pessoa")
+
+    private static final long serialVersionUID = 1L;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Long id;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "pessoa")
     @JsonIgnore
-    private Set<Socios> sociosList;
+    private Socios socios;
 
     public Pessoa() {
     }
 
-    public Pessoa(Integer id) {
+    public Pessoa(Long id) {
         this.id = id;
     }
-
+    
     public Pessoa(String cpf, String email, String nome, String sobrenome) {
         this.cpf = cpf;
         this.email = email;
