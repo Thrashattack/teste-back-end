@@ -1,0 +1,27 @@
+CREATE TABLE empresas (
+  id BIGINT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  cnpj VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255),
+  nome_fantasia VARCHAR(255) NOT NULL,
+  razao_social VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE pessoas (
+  id BIGINT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  cpf VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255),
+  nome VARCHAR(255) NOT NULL,
+  sobrenome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE socios (
+  id BIGINT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  pessoa BIGINT(11) NOT NULL,
+  empresa BIGINT(11) NOT NULL,
+  valor_da_cota NUMERIC NOT NULL,
+  FOREIGN KEY (pessoa) REFERENCES `pessoas` (`id`),
+  FOREIGN KEY (empresa) REFERENCES `empresas` (`id`)
+);
+  
+
+

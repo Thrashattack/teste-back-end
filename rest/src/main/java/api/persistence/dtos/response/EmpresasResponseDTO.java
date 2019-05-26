@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.persistence.dtos;
+package api.persistence.dtos.response;
 
-import api.persistence.entity.Empresa;
+import api.persistence.entity.Empresas;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,27 +14,26 @@ import lombok.Setter;
 
 /**
  *
- * @author Unknow
- * 
+ * @author Carlos Cunha
+ *
  */
 @Getter
 @Setter
-public class EmpresaResponseDTO {
+public class EmpresasResponseDTO {
 
-    
     private String cnpj, email, nomeFantasia, razaoSocial;
     private Set<SociosResponseDTO> socios;
     private BigDecimal capitalSocial;
 
-    public EmpresaResponseDTO(Empresa empresa, BigDecimal capital) {
+    public EmpresasResponseDTO(Empresas empresa, BigDecimal capital) {
         this.socios = new HashSet<>();
         this.cnpj = empresa.getCnpj();
         this.email = empresa.getEmail();
         this.nomeFantasia = empresa.getNomeFantasia();
         this.razaoSocial = empresa.getRazaoSocial();
-        empresa.getSocios().forEach(socio ->{
+        empresa.getSocios().forEach(socio -> {
             this.socios.add(new SociosResponseDTO(socio));
-        });        
+        });
         this.capitalSocial = capital;
     }
 }

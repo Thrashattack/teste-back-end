@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Repository
 public interface SociosRepository extends JpaRepository<Socios, Long> {
+    
     
 }

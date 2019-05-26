@@ -1,9 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * 
+ * 
  */
-package api.persistence.service;
+package api.persistence.services;
 
 import api.persistence.entity.Socios;
 import api.persistence.repository.SociosRepository;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Service
 public class SociosService implements Serializable {
@@ -25,24 +25,24 @@ public class SociosService implements Serializable {
     @Autowired
     private SociosRepository repository;
 
-    public Socios getById(Long id) {
+    public Socios getById(Long id) throws Exception {
         return repository.findById(id).get();
     }
 
-    public Set<Socios> getAll() {
+    public Set<Socios> getAll() throws Exception {
         return new HashSet<>(repository.findAll());
     }
 
-    public Socios save(Socios pessoa) {
+    public Socios save(Socios pessoa) throws Exception {
         return repository.save(pessoa);
     }
 
-    public Set<Socios> getPaginated(int page, int elements) {        
+    public Set<Socios> getPaginated(int page, int elements) throws Exception {
         return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
     @Transactional(readOnly = false)
-    public Socios edit(Socios pessoa, Long id) {
+    public Socios edit(Socios pessoa, Long id) throws Exception {
         Socios oldPessoa = this.getById(id);
         oldPessoa.setEmpresa(pessoa.getEmpresa());
         oldPessoa.setPessoa(pessoa.getPessoa());
@@ -52,7 +52,7 @@ public class SociosService implements Serializable {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         repository.deleteById(id);
     }
 }

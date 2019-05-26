@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.persistence.service;
+package api.persistence.services;
 
-import api.persistence.entity.Empresa;
-import api.persistence.repository.EmpresaRepository;
+import api.persistence.entity.Empresas;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,40 +13,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import api.persistence.repository.EmpresasRepository;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Service
-public class EmpresaService implements Serializable {
+public class EmpresasService implements Serializable {
 
     @Autowired
-    private EmpresaRepository repository;
+    private EmpresasRepository repository;
 
-    public Empresa getById(Long id) {        
-        return repository.findById(id).get();        
+    public Empresas getById(Long id) throws Exception {
+        return repository.findById(id).get();
     }
 
-    public Set<Empresa> getAll() {
-        return new HashSet<>(repository.findAll());        
+    public Set<Empresas> getAll() {
+        return new HashSet<>(repository.findAll());
     }
 
-    public Set<Empresa> getPaginated(int page, int elements) {                
+    public Set<Empresas> getPaginated(int page, int elements) throws Exception {
         return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
-    public Empresa getByCnpj(String cnpj) {        
+    public Empresas getByCnpj(String cnpj) throws Exception {
         return repository.findByCnpj(cnpj);
     }
 
-    public Empresa save(Empresa empresa) {
+    public Empresas save(Empresas empresa) throws Exception {
         return repository.save(empresa);
     }
 
     @Transactional(readOnly = false)
-    public Empresa edit(Empresa empresa, Long id) {
-        Empresa oldEmpresa = repository.findById(id).get();
+    public Empresas edit(Empresas empresa, Long id) throws Exception {
+        Empresas oldEmpresa = repository.findById(id).get();
         oldEmpresa.setId(empresa.getId());
         oldEmpresa.setCnpj(empresa.getCnpj());
         oldEmpresa.setEmail(empresa.getEmail());
@@ -59,7 +59,7 @@ public class EmpresaService implements Serializable {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         repository.deleteById(id);
     }
 }

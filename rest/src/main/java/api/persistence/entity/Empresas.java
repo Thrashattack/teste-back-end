@@ -5,68 +5,66 @@
  */
 package api.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Entity
 @AllArgsConstructor
 @Getter
 @Setter
-public class Empresa implements Serializable {
+public class Empresas implements Serializable {
 
-    
     @Column(name = "cnpj")
     private String cnpj;
-    
+
     @Column(name = "email")
     private String email;
-    
+
     @Column(name = "nome_fantasia")
     private String nomeFantasia;
-  
+
     @Column(name = "razao_social")
     private String razaoSocial;
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @OneToMany(mappedBy = "empresa")
+    @ManyToMany(mappedBy="empresa")
     @JsonManagedReference
     private Set<Socios> socios;
 
-    public Empresa() {
+    public Empresas() {
     }
 
-    public Empresa(Long id) {
+    public Empresas(Long id) {
         this.id = id;
     }
-    
-    public Empresa (String cnpj, String email, String razaoSocial, String nomeFantasia) {
+
+    public Empresas(String cnpj, String email, String razaoSocial, String nomeFantasia) {
         this.cnpj = cnpj;
         this.email = email;
         this.razaoSocial = razaoSocial;
         this.nomeFantasia = nomeFantasia;
+        this.socios = new HashSet<>();
     }
-    
-   
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -76,11 +74,11 @@ public class Empresa implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empresa)) {
+        
+        if (!(object instanceof Empresas)) {
             return false;
         }
-        Empresa other = (Empresa) object;
+        Empresas other = (Empresas) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

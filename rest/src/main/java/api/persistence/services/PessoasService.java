@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.persistence.service;
+package api.persistence.services;
 
-import api.persistence.entity.Pessoa;
-import api.persistence.repository.PessoaRepository;
+import api.persistence.entity.Pessoas;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,40 +13,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import api.persistence.repository.PessoasRepository;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Service
-public class PessoaService implements Serializable {
+public class PessoasService implements Serializable {
 
     @Autowired
-    private PessoaRepository repository;
+    private PessoasRepository repository;
 
-    public Pessoa getById(Long id) {
+    public Pessoas getById(Long id) throws Exception {
         return repository.findById(id).get();
     }
 
-    public Set<Pessoa> getAll() {
+    public Set<Pessoas> getAll() throws Exception {
         return new HashSet<>(repository.findAll());
     }
 
-    public Pessoa getByCpf(String cpf) {
+    public Pessoas getByCpf(String cpf) throws Exception {
         return repository.findByCpf(cpf);
     }
 
-    public Set<Pessoa> getPaginated(int page, int elements) {            
+    public Set<Pessoas> getPaginated(int page, int elements) throws Exception {
         return new HashSet<>(repository.findAll(PageRequest.of(page, elements)).getContent());
     }
 
-    public Pessoa save(Pessoa pessoa) {
+    public Pessoas save(Pessoas pessoa) throws Exception {
         return repository.save(pessoa);
     }
 
     @Transactional(readOnly = false)
-    public Pessoa edit(Pessoa pessoa, Long id) {
-        Pessoa oldPessoa = this.getById(id);
+    public Pessoas edit(Pessoas pessoa, Long id) throws Exception {
+        Pessoas oldPessoa = this.getById(id);
         oldPessoa.setCpf(pessoa.getCpf());
         oldPessoa.setEmail(pessoa.getEmail());
         oldPessoa.setNome(pessoa.getNome());
@@ -57,7 +57,7 @@ public class PessoaService implements Serializable {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         repository.deleteById(id);
     }
 

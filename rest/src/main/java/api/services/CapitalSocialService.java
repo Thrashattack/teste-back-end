@@ -3,41 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package api.persistence.service;
+package api.services;
 
-import api.persistence.entity.Empresa;
+import api.persistence.entity.Empresas;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
 @Service
 public class CapitalSocialService implements Serializable {
 
     private static BigDecimal capitalSocial = BigDecimal.ZERO;
 
-    public static BigDecimal getCapitalSocial(Empresa e) {
-        CapitalSocialService.setZeroTemp();
-        if (e.getSocios().isEmpty() || e.getSocios() == null)
-            return CapitalSocialService.getTemp();
+    public static BigDecimal getCapitalSocial(Empresas e) {
+        setZeroTemp();
+        if (e.getSocios().isEmpty() || e.getSocios() == null) {
+            return getTemp();
+        }
         e.getSocios().forEach(socio -> {
-            CapitalSocialService.setTemp(socio.getValorDaCota());
+            setTemp(socio.getValorDaCota());
         });
-        return CapitalSocialService.getTemp();
+        return getTemp();
     }
 
     private static BigDecimal getTemp() {
-        return CapitalSocialService.capitalSocial;
+        return capitalSocial;
     }
 
     private static void setTemp(BigDecimal temp) {
-        CapitalSocialService.capitalSocial = CapitalSocialService.capitalSocial.add(temp);
+        capitalSocial = capitalSocial.add(temp);
     }
 
     private static void setZeroTemp() {
-        CapitalSocialService.capitalSocial = BigDecimal.ZERO;
+        capitalSocial = BigDecimal.ZERO;
     }
 }

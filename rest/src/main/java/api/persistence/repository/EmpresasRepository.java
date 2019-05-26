@@ -5,19 +5,18 @@
  */
 package api.persistence.repository;
 
-import api.persistence.entity.Pessoa;
+import api.persistence.entity.Empresas;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Unknow
+ * @author Carlos Cunha
  */
-@Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+@Repository 
+public interface EmpresasRepository extends JpaRepository<Empresas, Long> {
     
-    Pessoa findByCpf(@Param("cpf") String cpf);
-    
+    Empresas findByCnpj(@Param("cnpj") String cnpj);    
     
 }
